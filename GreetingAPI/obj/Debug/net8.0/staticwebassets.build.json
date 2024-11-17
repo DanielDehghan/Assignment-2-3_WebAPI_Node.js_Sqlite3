@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "q21ofXvl+nuo+quLDbZNxUdsbemTjevvlUgiFeqlCIA=",
+  "Source": "GreetingAPI",
+  "BasePath": "_content/GreetingAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
