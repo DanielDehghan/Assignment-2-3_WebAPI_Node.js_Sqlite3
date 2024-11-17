@@ -1,6 +1,0 @@
-@GreetingAPI_HostAddress = http://localhost:5105
-
-GET {{GreetingAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
