@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import greetingRouter from './routes/greetings.js';
+import greetingRouter from './api/greetings.js';
 
 dotenv.config();
 
