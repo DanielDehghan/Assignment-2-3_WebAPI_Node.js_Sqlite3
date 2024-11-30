@@ -1,54 +1,20 @@
-# Web API with SQLite in Node.js
+# API Deployment
 
-## Base URL
-http://localhost:3000/api/greeting/
+## Live API URL
+The live API can be accessed at:
+[https://your-vercel-deployment-url](https://your-vercel-deployment-url)
 
+## Example Endpoint
+**POST** `/api/greeting/greet`
 
-## Endpoints
+- **Request Body**: JSON with `timeOfDay`, `language`, and `tone`
+- **Response**: JSON with `greetingMessage` and `tone`
 
-### 1. `/greet` (POST)
-#### Description:
-This endpoint receives a greeting request and returns the appropriate greeting message based on the `timeOfDay`, `language`, and `tone`.
+## Console Application
+To interact with the live API using the console application:
+1. Clone the repository.
+2. Run the `GreetingClient.js` script.
+3. Follow the prompts to request greetings.
 
-#### Request Body (JSON):
-```json
-{
-  "timeOfDay": "Morning",
-  "language": "English",
-  "tone": "Casual"
-}
-
- Example Response (JSON):
-
-{
-  "greetingMessage": "Morning, buddy!"
-}
-
- Errors:
-
-    404: "Greeting not found" if no matching greeting is found.
-    500: "Database error" for any unexpected issues.
-
- 2. /getAllTimesOfDay (GET)
- Description:
-
-Returns a list of all available times of the day from the database.
- Example Response (JSON):
-
-[
-  "Morning",
-  "Afternoon",
-  "Evening"
-]
-
- 3. /getSupportedLanguages (GET)
- Description:
-
-Returns a list of all supported languages from the database.
-
- Example Response (JSON):
-[
-  "English",
-  "French",
-  "Spanish"
-]
+## Setup Instructions
+- Add `DATABASE_URL` to your environment variables on Vercel.
