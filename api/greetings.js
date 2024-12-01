@@ -1,9 +1,9 @@
 import express from 'express';
-import db from '../db.js';  // Adjust if your path differs
+import db from '../db.js';
 const router = express.Router();
 
-// Greet endpoint 
-router.post('/greet', (req, res) => {
+// Greet endpoint
+router.post('/greet', async (req, res) => {
     let { timeOfDay, language, tone } = req.body;
     timeOfDay = timeOfDay.trim().toLowerCase();
     language = language.trim().toLowerCase();
@@ -11,62 +11,50 @@ router.post('/greet', (req, res) => {
 
     const query = `
         SELECT greetingMessage, tone FROM Greetings 
-        WHERE LOWER(timeOfDay) = $1
-          AND LOWER(language) = $2
-          AND LOWER(tone) = $3
+        WHERE LOWER(timeOfDay) = ?
+          AND LOWER(language) = ?
+          AND LOWER(tone) = ?
     `;
 
-    db.query(query, [timeOfDay, language, tone])
-        .then(result => {
-            console.log(result.rows);
-            const row = result.rows[0];
-            if (!row) {
-                return res.status(404).send({
-                    error: `Greeting not found. Please check your inputs: timeOfDay=${timeOfDay}, language=${language}, tone=${tone}`
-                });
-            }
-            res.json({
-                greetingMessage: row.greetingmessage,
-                tone: row.tone
+    try {
+        const row = await db.get(query, [timeOfDay, language, tone]);
+        if (!row) {
+            return res.status(404).send({
+                error: `Greeting not found. Please check your inputs: timeOfDay=${timeOfDay}, language=${language}, tone=${tone}`
             });
-        })
-        .catch(err => {
-            console.error('Database error:', err);
-            return res.status(500).send({ error: 'Database error occurred' });
-        });
-
+        }
+        res.json({ greetingMessage: row.greetingMessage, tone: row.tone });
+    } catch (err) {
+        console.error('Database error:', err);
+        return res.status(500).send({ error: 'Database error occurred' });
+    }
 });
 
 // Endpoint to get all times of day
-router.get('/getAllTimesOfDay', (req, res) => {
+router.get('/getAllTimesOfDay', async (req, res) => {
     const query = `SELECT DISTINCT timeOfDay FROM Greetings`;
-    db.query(query)
-        .then(result => {
-            console.log('Query executed. Rows returned:', result.rows);
-            const rows = result.rows;
-            if (rows.length === 0) {
-                return res.status(404).send({ error: 'No timeOfDay found in the database' });
-            }
-            res.json(rows.map(row => row.timeofday));
-        })
-        .catch(err => {
-            console.error('Database error:', err);
-            return res.status(500).send({ error: 'Database error occurred' });
-        });
+    try {
+        const rows = await db.all(query);
+        if (rows.length === 0) {
+            return res.status(404).send({ error: 'No timeOfDay found in the database' });
+        }
+        res.json(rows.map(row => row.timeOfDay));
+    } catch (err) {
+        console.error('Database error:', err);
+        return res.status(500).send({ error: 'Database error occurred' });
+    }
 });
 
-
 // Endpoint to get supported languages
-router.get('/getSupportedLanguages', (req, res) => {
+router.get('/getSupportedLanguages', async (req, res) => {
     const query = `SELECT DISTINCT language FROM Greetings`;
-    db.query(query)
-        .then(result => {
-            const rows = result.rows;
-            res.json(rows.map(row => row.language));
-        })
-        .catch(err => {
-            return res.status(500).send({ error: 'Database error' });
-        });
+    try {
+        const rows = await db.all(query);
+        res.json(rows.map(row => row.language));
+    } catch (err) {
+        console.error('Database error:', err);
+        return res.status(500).send({ error: 'Database error occurred' });
+    }
 });
 
 export default router;
