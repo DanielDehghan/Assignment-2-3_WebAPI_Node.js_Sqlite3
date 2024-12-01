@@ -16,9 +16,6 @@ app.get('/health', (req, res) => res.status(200).send('Server is healthy!'));
 
 app.get('/', (req, res) => res.send('Welcome to the API!'));
 
-export default (req, res) => {
-  app(req, res); // vercel's serverless handler
-};
-
+export default app;
 
 
