@@ -10,15 +10,15 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 app.use('/api/greetings', greetingRouter);
-
 
 app.get('/health', (req, res) => res.status(200).send('Server is healthy!'));
 
-
 app.get('/', (req, res) => res.send('Welcome to the API!'));
 
+export default (req, res) => {
+  app(req, res); // vercel's serverless handler
+};
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
