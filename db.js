@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const dbPath = process.env.DB_PATH ? path.resolve(process.env.DB_PATH) : path.join(process.cwd(), 'greetings.db');
-
+console.log("DB Path:", dbPath);
 // Open and return the database connection
 const openDb = async () => {
   const db = await open({
@@ -51,9 +51,11 @@ const openDb = async () => {
       ('Evening', 'Spanish', 'Buenas Noches', 'Formal'),
       ('Evening', 'Spanish', '¡Qué tal!', 'Casual');
     `;
+    console.log("Seeding data...");
     await db.run(query);
     console.log('Database populated with greetings.');
   };
+  
 
   await createTable();
   await seedData();
