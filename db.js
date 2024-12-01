@@ -1,13 +1,11 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import path from 'path';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const dbPath = process.env.DB_PATH ? path.resolve(process.env.DB_PATH) : path.join(process.cwd(), 'greetings.db');
-console.log("DB Path:", dbPath);
-// Open and return the database connection
+const dbPath = process.env.DB_PATH || ':memory:';  
+
 const openDb = async () => {
   const db = await open({
     filename: dbPath,
@@ -55,7 +53,6 @@ const openDb = async () => {
     await db.run(query);
     console.log('Database populated with greetings.');
   };
-  
 
   await createTable();
   await seedData();
@@ -63,7 +60,6 @@ const openDb = async () => {
   return db;  // Return the database instance
 };
 
-// Call the function to open the database and then export the connection
 const dbInstance = openDb().catch((err) => {
   console.error('Error running migrations:', err);
   process.exit(1);
